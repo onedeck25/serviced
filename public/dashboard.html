@@ -235,7 +235,7 @@
         submitBtn.textContent = 'Uploading...';
         submitBtn.style.backgroundColor = 'var(--lambo-orange)';
         
-        const response = await fetch('/upload', {
+        const response = await fetch('https://serviced-1.onrender.com/upload', {
           method: 'POST',
           body: formData,
         });
@@ -262,7 +262,7 @@
         fetchBtn.disabled = true;
         fetchBtn.textContent = 'Loading...';
         
-        const response = await fetch('http://localhost:3000/documents');
+        const response = await fetch('https://serviced-1.onrender.com/documents');
         const docs = await response.json();
         const container = document.getElementById('documents');
         container.innerHTML = '';

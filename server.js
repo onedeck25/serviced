@@ -3,13 +3,15 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const app = express();
 
-dotenv.config(); // <--- Load environment variables
+// Load environment variables
+require('dotenv').config(); // Not mandatory on Render but useful locally
 
 // MongoDB Atlas connection
-mongoose.connect(process.env.MONGO_URI, {
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -20,13 +22,15 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads')); // serve uploads folder (important)
+
+// Serve static files (like uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Mongoose User Schema
 const userSchema = new mongoose.Schema({
-    username: String,
-    email: { type: String, unique: true },
-    password: String,
+  username: String,
+  email: { type: String, unique: true },
+  password: String,
 });
 
 const documentSchema = new mongoose.Schema({
@@ -50,11 +54,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Routes
+
+// Signup Route
 app.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
+  
   if (!username || !email || !password) {
     return res.status(400).json({ message: 'Missing username, email, or password' });
   }
+  
   try {
     const newUser = new User({ username, email, password });
     await newUser.save();
@@ -65,6 +73,7 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+// Get all documents
 app.get('/documents', async (req, res) => {
   try {
     const docs = await Document.find({});
@@ -75,6 +84,7 @@ app.get('/documents', async (req, res) => {
   }
 });
 
+// Upload document
 app.post('/upload', upload.single('document'), async (req, res) => {
   const { username, docType } = req.body;
   console.log('Received document upload:', username, docType);
@@ -96,6 +106,7 @@ app.post('/upload', upload.single('document'), async (req, res) => {
   }
 });
 
+// Get documents for a specific user
 app.get('/documents/:username', async (req, res) => {
   const { username } = req.params;
   try {

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lamborghini Club - Signup</title>
+  <style>
+    :root {
+      --lambo-yellow: #FFD700;
+      --lambo-orange: #FFA500;
+      --lambo-red: #CC0000;
+      --carbon: #1a1a1a;
+      --platinum: #e5e4e2;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial Narrow', 'Arial', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                  url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--platinum);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-container {
+      margin-bottom: 20px;
+    }
+    
+    .logo {
+      height: 80px;
+      filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      background: linear-gradient(to right, var(--lambo-yellow), var(--lambo-red));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    
+    #signupForm {
+      background-color: rgba(26, 26, 26, 0.8);
+      padding: 40px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      border-top: 2px solid var(--lambo-yellow);
+      border-bottom: 2px solid var(--lambo-red);
+    }
+    
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+    
+    input:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-left: 3px solid var(--lambo-yellow);
+    }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(to right, var(--lambo-orange), var(--lambo-red));
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background: linear-gradient(to right, var(--lambo-yellow), var(--lambo-red));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+    }
+    
+    .brand-tagline {
+      text-align: center;
+      margin-top: 30px;
+      font-style: italic;
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+    }
+      
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    }
+      
+    .divider-text {
+      padding: 0 10px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      color: var(--lambo-yellow);
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img src="https://www.carlogos.org/logo/Lamborghini-logo-1920x1080.png" alt="Lamborghini" class="logo">
+  </div>
+  
+  <h1>Lamborghini Club</h1>
+  
+  <form id="signupForm">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="email" name="email" placeholder="Email" required />
+    <input type="password" name="password" placeholder="Password" required />
+    
+    <div class="divider">
+      <span class="divider-text">Exclusive Access</span>
+    </div>
+    
+    <button type="submit">Start Your Engine</button>
+  </form>
+  
+  
+  <p class="brand-tagline">"Experience the power of the raging bull"</p>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      const response = await fetch('http://localhost:3000/signup', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data),
+});
+
+
+      if (response.ok) {
+        window.location.href = '/dashboard.html';
+      } else {
+        alert('Signup failed. Please try again.');
+      }
+    });
+    
+    // Add Lamborghini engine sound effect on hover
+    const button = document.querySelector('button');
+    button.addEventListener('mouseover', () => {
+      const audio = new Audio('https://www.soundjay.com/mechanics/sounds/car-rev-01.mp3');
+      audio.volume = 0.3;
+      audio.play();
+    });
+  </script>
+</body>
+</html>
